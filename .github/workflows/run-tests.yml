@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main
-      - feature/suppliers
+      - develop
+      - feature
   pull_request:
     types:
       - opened
@@ -17,9 +18,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: test_db
-          POSTGRES_USER: test_user
-          POSTGRES_PASSWORD: mysecretpassword
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options:
