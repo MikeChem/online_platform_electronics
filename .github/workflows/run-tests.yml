@@ -47,6 +47,11 @@ jobs:
         run: |
           poetry install --no-root
 
+      - name: Set secret key
+        run: |
+          echo "Setting SECRET_KEY"
+          export SECRET_KEY="test-secret-key-1234567890abcdef"
+
       - name: Apply migrations
         run: |
           poetry run python manage.py migrate
