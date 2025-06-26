@@ -18,9 +18,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: mysecretpassword
         ports:
           - 5432:5432
         options:
@@ -50,10 +50,6 @@ jobs:
       - name: Apply migrations
         run: |
           poetry run python manage.py migrate
-
-      - name: Create superuser (optional)
-        run: |
-          poetry run python manage.py createsuperuser --noinput
 
       - name: Run tests
         run: |
