@@ -1,0 +1,51 @@
+name: Run Django Tests
+
+on:
+  push:
+    branches:
+      - main
+      - feature/suppliers
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org  | python3 -
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: |
+          poetry install
+
+      - name: Apply migrations
+        run: |
+          poetry run python manage.py migrate
+
+      - name: Run tests
+        run: |
+          poetry run python -m pytest
