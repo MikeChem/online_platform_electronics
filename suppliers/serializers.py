@@ -1,20 +1,27 @@
 from rest_framework import serializers
 from .models import Supplier, Contact, Product
 
+
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ['email', 'country', 'city', 'street', 'house_number']
+        fields = ['id', 'email', 'country', 'city', 'street', 'house_number']
+
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['name', 'model', 'release_date']
+        fields = ['id', 'name', 'model', 'release_date']
+
 
 class SupplierSerializer(serializers.ModelSerializer):
-    contacts = ContactSerializer(read_only=True)
+    contacts = ContactSerializer()
     products = ProductSerializer(many=True, read_only=True)
-    supplier = serializers.PrimaryKeyRelatedField(queryset=Supplier.objects.all(), required=False, allow_null=True)
+    supplier = serializers.PrimaryKeyRelatedField(
+        queryset=Supplier.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
     class Meta:
         model = Supplier
@@ -24,8 +31,8 @@ class SupplierSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['debt', 'created_at', 'level']
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        if self.context['request'].method in ['GET']:
-            data['supplier'] = instance.supplier.id if instance.supplier else None
-        return data
+    def create(self, validated_data):
+        contact_data = validated_data.pop('contacts')
+        contact, _ = Contact.objects.get_or_create(**contact_data)
+
+        return Supplier.objects.create(contacts=contact, **validated_data)
