@@ -1,16 +1,17 @@
-from pathlib import Path
 import os
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'test-secret-key-1234567890abcdef')
+SECRET_KEY = os.getenv("SECRET_KEY", "test-secret-key-1234567890abcdef")
 
-DEBUG = os.getenv('DEBUG', 'False') == 'True'
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -21,7 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
-    'drf_spectacular',
+    "drf_spectacular",
     "suppliers",
 ]
 
@@ -55,39 +56,37 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'test_db'),
-        'USER': os.getenv('DB_USER', 'test_user'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'mysecretpassword'),
-        'HOST': os.getenv('DB_HOST', 'localhost'),
-        'PORT': os.getenv('DB_PORT', '5432'),
-        'OPTIONS': {
-            'client_encoding': 'UTF8'
-        }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME", "test_db"),
+        "USER": os.getenv("DB_USER", "test_user"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "mysecretpassword"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
+        "OPTIONS": {"client_encoding": "UTF8"},
     }
 }
 
 REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'suppliers.permissions.IsActiveEmployee',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "suppliers.permissions.IsActiveEmployee",
     ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter'
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
     ],
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Online Platform Electronics API',
-    'DESCRIPTION': 'API платформы торговой сети электроники. '
-                   'Позволяет управлять поставщиками, их контактами, продуктами и задолженностями.',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
+    "TITLE": "Online Platform Electronics API",
+    "DESCRIPTION": "API платформы торговой сети электроники. "
+    "Позволяет управлять поставщиками, их контактами, продуктами и задолженностями.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
     # 'SWAGGER_UI_SETTINGS': {'deepLinking': True},
 }
 
